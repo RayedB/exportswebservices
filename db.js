@@ -13,11 +13,11 @@ exports.connectDb = () => {
 
 exports.insert = (collectionName, data) => {
 
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
 
         const collection = Database.collection(collectionName)
 
-        collection.insertOne(data, function(err, result) {
+        collection.insertOne(data, (err, result) => {
 
             if (err) {
                 reject(err)
@@ -30,11 +30,11 @@ exports.insert = (collectionName, data) => {
 
 exports.get = (collectionName, query) => {
 
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
 
         const collection = Database.collection(collectionName)
 
-        collection.findOne(query, function(err, result) {
+        collection.findOne(query, (err, result) => {
 
             if (err) {
                 reject(err)
