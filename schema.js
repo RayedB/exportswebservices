@@ -18,10 +18,7 @@ const QueryRootType = new GraphQLObjectType({
     companies: {
       type: new GraphQLList(CompanyType),
       description: 'List of companies',
-      resolve: () => {
-        console.log('hello')
-        return Companies
-      }
+      resolve: () => Companies
     }
   })
 });
