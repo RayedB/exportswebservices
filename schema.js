@@ -1,31 +1,59 @@
 const { GraphQLString, GraphQLList,GraphQLObjectType,GraphQLNonNull, GraphQLSchema } = require('graphql');
-
-const Companies = [{'id':0, 'name':'Google'},{'id':1,'name':'Algolia'}]
+const CompanyModel = require('./models/companies')
+const Companies = [{'name':'Google'},{'name':'Algolia'}]
 
 const CompanyType = new GraphQLObjectType({
   name: 'Company',
-  description: '',
   fields: () => ({
-    id: {type: new GraphQLNonNull(GraphQLString)},
-    name: {type: new GraphQLNonNull(GraphQLString)},
+   name: {type: new GraphQLNonNull(GraphQLString)},
   })
 })
 
-const QueryRootType = new GraphQLObjectType({
-  name: 'Schema',
-  description: '',
+const query = new GraphQLObjectType({
+  name: 'Query',
   fields: () => ({
     companies: {
       type: new GraphQLList(CompanyType),
-      description: 'List of companies',
       resolve: () => Companies
+    },
+    company: {
+      type: CompanyType,
+      args: {
+        name: { type: GraphQLString }
+      },
+      resolve: (_, { name }) => {
+        const filter = Companies.filter(comp => comp.name == name)
+        if (filter.length) return filter[0]
+        else throw 'Company does not exist'
+        }
     }
   })
-});
+})
 
+const mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addCompany: {
+      type: CompanyType,
+      args: {
+        name: { type: GraphQLString }
+      },
+      resolve(_, { name }) {
+        console.log(name)
+        return CompanyModel.addOne(name)
+        .then(() => {name})
+        .catch(err => {
+          console.log(err)
+          throw 'Internal Error'
+        })
+      }
+    }
+  }
+})
 // This is the schema declaration
 const Schema = new GraphQLSchema({
-  query: QueryRootType
+  query,
+  mutation
 })
 
 module.exports = Schema
