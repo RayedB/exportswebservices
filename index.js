@@ -16,7 +16,7 @@ const schema = require('./schema')
     app.use('/api', graphqlHTTP({
       schema,
       rootValue,
-      graphiql: true,
+      graphiql: false,
     }))
 
     app.listen(4000)
