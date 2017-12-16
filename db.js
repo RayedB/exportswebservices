@@ -17,6 +17,17 @@ exports.connectDb = () => {
         })
       }
 
+exports.index = function(collectionName, field, options) {
+    if (Db) {
+        Db.ensureIndex(collectionName, field, options, (err) => {
+            if (err) {
+                console.log(err)
+            }
+        })
+    } else {
+        console.error('*** DB is not ready')
+    }
+}
 
 exports.insert = (collectionName, data) => {
     return new Promise((resolve, reject) => {

@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 const { GraphQLString, GraphQLList,GraphQLObjectType,GraphQLNonNull, GraphQLSchema } = require('graphql')
 const CompanyModel = require('./models/companies')
+=======
+const { GraphQLString, GraphQLList,GraphQLObjectType,GraphQLNonNull, GraphQLSchema } = require('graphql');
+const CompanyModel = require('./models/companies')
+const Companies = [{'name':'Google'},{'name':'Algolia'}]
+>>>>>>> 1d7f607b8e59cf221a87312d6deeaeab8ca9c69c
 
 const CompanyType = new GraphQLObjectType({
   name: 'Company',
@@ -13,7 +19,11 @@ const query = new GraphQLObjectType({
   fields: () => ({
     companies: {
       type: new GraphQLList(CompanyType),
+<<<<<<< HEAD
       resolve: () => CompanyModel.getAll()
+=======
+      resolve: () => Companies
+>>>>>>> 1d7f607b8e59cf221a87312d6deeaeab8ca9c69c
     },
     company: {
       type: CompanyType,
@@ -21,11 +31,17 @@ const query = new GraphQLObjectType({
         name: { type: GraphQLString }
       },
       resolve: (_, { name }) => {
+<<<<<<< HEAD
         return CompanyModel.get({name})
         .then(res => {
           if (res) return res
           throw 'Company does not exists'
         })
+=======
+        const filter = Companies.filter(comp => comp.name == name)
+        if (filter.length) return filter[0]
+        else throw 'Company does not exist'
+>>>>>>> 1d7f607b8e59cf221a87312d6deeaeab8ca9c69c
         }
     }
   })
@@ -40,6 +56,7 @@ const mutation = new GraphQLObjectType({
         name: { type: GraphQLString }
       },
       resolve(_, { name }) {
+<<<<<<< HEAD
         return CompanyModel.addOne({name})
         .then(res => ({name}))
         .catch(err => {
@@ -49,6 +66,14 @@ const mutation = new GraphQLObjectType({
              console.log(err)
              throw 'Internal Error'
            }
+=======
+        console.log(name)
+        return CompanyModel.addOne(name)
+        .then(() => {name})
+        .catch(err => {
+          console.log(err)
+          throw 'Internal Error'
+>>>>>>> 1d7f607b8e59cf221a87312d6deeaeab8ca9c69c
         })
       }
     }
