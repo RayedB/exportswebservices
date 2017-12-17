@@ -1,5 +1,8 @@
-const { GraphQLString, GraphQLList,GraphQLObjectType,GraphQLNonNull, GraphQLSchema } = require('graphql')
+const { GraphQLString, GraphQLList,GraphQLObjectType,
+  GraphQLNonNull, GraphQLSchema } = require('graphql')
+const bcrypt = require('bcrypt')
 const CompanyModel = require('./models/companies')
+const UserModel = require('./models/users')
 
 const CompanyType = new GraphQLObjectType({
   name: 'Company',
@@ -13,7 +16,7 @@ const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
    email: {type: new GraphQLNonNull(GraphQLString)},
-   password: {type: new GraphQLNonNull(GraphQLString)}
+   password: {type: GraphQLString}
   })
 })
 
@@ -51,8 +54,8 @@ const mutation = new GraphQLObjectType({
       },
       resolve(_, { name, users }) {
         if (!users.length) throw 'At least one user is required'
-        return CompanyModel.addOne({name, users})
-        .then(res => (res))
+        return CompanyModel.add({name, users})
+        .then(res => res)
         .catch(err => {
            if (err.code == 11000) {
              throw 'Company already exists'
@@ -60,6 +63,35 @@ const mutation = new GraphQLObjectType({
              console.log(err)
              throw 'Internal Error'
            }
+        })
+      }
+    },
+    addUser: {
+      type: UserType,
+      args: {
+        email: { type: GraphQLString },
+        password: { type: GraphQLString }
+      },
+      resolve(_, { email, password }) {
+        return CompanyModel.getUsers()
+        .then(users => {
+          if (users.filter(u => u === email).length) {
+            return bcrypt.hash(password, 10)
+            .then(hash => UserModel.add({ email, password:hash })
+            .then(res => {
+              delete res.password
+              return res
+            }))
+          } else {
+            throw 'User does not belong to any company'
+          }
+        })
+        .catch(err => {
+          if (err.code == 11000) {
+            throw 'User already exists'
+          } else {
+            throw err
+          }
         })
       }
     }

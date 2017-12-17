@@ -1,13 +1,9 @@
 const Db = require('../db')
 
-exports.addOne = (data) => {
-  return Db.insert('companies',data)
-}
+exports.add = (data) => Db.insert('companies',data)
 
-exports.getAll = () => {
-  return Db.getAll('companies')
-}
-exports.get = (name) => {
-  console.log(name)
-  return Db.get('companies',name)
-}
+exports.getAll = () =>  Db.getAll('companies')
+
+exports.get = (name) =>  Db.get('companies',name)
+
+ exports.getUsers = () => Db.getAllField('companies', 'users')

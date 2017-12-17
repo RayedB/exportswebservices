@@ -9,14 +9,18 @@ exports.connectDb = () => {
           console.log('connected to DB')
           Db = client.db('project')
 
-          Db.ensureIndex('companies', 'name', { unique: true }, (err, obj) => {
-            if (err) {
-              console.log(err)
-            }
-          })
+          index('companies','name')
+          index('users','email')
         })
       }
 
+function index(coll, field) {
+  Db.ensureIndex(coll, field, { unique: true }, (err, obj) => {
+    if (err) {
+      console.log(err)
+    }
+  })
+}
 
 exports.insert = (collectionName, data) => {
     return new Promise((resolve, reject) => {
@@ -87,12 +91,12 @@ exports.getAll = function(collectionName, fields = {}) {
     })
 }
 
-exports.update = function(collectionName, id, values) {
+exports.update = (collectionName, id, values) => {
 
     return new Promise((resolve, reject) => {
 
         // update
-        const collection = DB.collection(collectionName)
+        const collection = Db.collection(collectionName)
         //let field = TODO depends on collectionName
 
         collection.updateOne({ 'name': id }, { $set: values }, (err, data) => {
@@ -100,6 +104,23 @@ exports.update = function(collectionName, id, values) {
                 reject(err)
             } else {
                 resolve()
+            }
+        })
+
+    })
+}
+exports.getAllField = (collectionName, field) => {
+
+    return new Promise((resolve, reject) => {
+
+        // update
+        const collection = Db.collection(collectionName)
+
+        collection.distinct(field, (err, data) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(data)
             }
         })
 
