@@ -9,7 +9,7 @@ exports.connectDb = () => {
           console.log('connected to DB')
           Db = client.db('project')
 
-          Db.ensureIndex('companies', "name", { unique: true }, (err, obj) => {
+          Db.ensureIndex('companies', 'name', { unique: true }, (err, obj) => {
             if (err) {
               console.log(err)
             }
@@ -17,17 +17,6 @@ exports.connectDb = () => {
         })
       }
 
-exports.index = function(collectionName, field, options) {
-    if (Db) {
-        Db.ensureIndex(collectionName, field, options, (err) => {
-            if (err) {
-                console.log(err)
-            }
-        })
-    } else {
-        console.error('*** DB is not ready')
-    }
-}
 
 exports.insert = (collectionName, data) => {
     return new Promise((resolve, reject) => {
@@ -39,7 +28,7 @@ exports.insert = (collectionName, data) => {
             if (err) {
                 reject(err)
             } else {
-                resolve()
+                resolve(data)
             }
         })
     })
@@ -95,5 +84,24 @@ exports.getAll = function(collectionName, fields = {}) {
                 })
             }
         })
+    })
+}
+
+exports.update = function(collectionName, id, values) {
+
+    return new Promise((resolve, reject) => {
+
+        // update
+        const collection = DB.collection(collectionName)
+        //let field = TODO depends on collectionName
+
+        collection.updateOne({ 'name': id }, { $set: values }, (err, data) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve()
+            }
+        })
+
     })
 }
