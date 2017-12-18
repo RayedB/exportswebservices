@@ -94,6 +94,28 @@ const mutation = new GraphQLObjectType({
           }
         })
       }
+    },
+    logUser: {
+      type: GraphQLString,
+      args: {
+        email: { type: GraphQLString },
+        password: { type: GraphQLString }
+      },
+      resolve(_, { email, password }) {
+        return UserModel.get({email})
+        .then(user => {
+          if (user) {
+            return bcrypt.compare(password, user.password)
+            .then(res => {
+              if (res) return 'HEREISYOURTOKEN1234'
+              throw 'Wrong password'
+            })
+          } else {
+            throw 'User does not exists'
+          }
+        })
+        .catch(err => { throw err })
+      }
     }
   }
 })
