@@ -1,4 +1,4 @@
-## Testing
+## API endpoints
 
 # Companies
 
