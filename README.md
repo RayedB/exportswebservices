@@ -1,6 +1,6 @@
-## API endpoints
+# API endpoints
 
-# Companies
+## Companies
 
 - Add company:
 ```
@@ -15,7 +15,7 @@ GET localhost:4000/api/graphql?query={company(name:"Google"){name,users}}
 ```
 GET localhost:4000/api/graphql?query={companies{name,users}}
 ```
-# Users
+## Users
 
 - Register:
 ```

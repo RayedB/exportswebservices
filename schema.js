@@ -1,6 +1,8 @@
 const { GraphQLString, GraphQLList,GraphQLObjectType,
   GraphQLNonNull, GraphQLSchema } = require('graphql')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const { secret } = require('./conf')
 const CompanyModel = require('./models/companies')
 const UserModel = require('./models/users')
 
@@ -107,7 +109,8 @@ const mutation = new GraphQLObjectType({
           if (user) {
             return bcrypt.compare(password, user.password)
             .then(res => {
-              if (res) return 'HEREISYOURTOKEN1234'
+              var toto = 'tot'
+              if (res) return jwt.sign({id:user._id}, secret, { expiresIn: '6h' })
               throw 'Wrong password'
             })
           } else {
