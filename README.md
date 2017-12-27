@@ -1,11 +1,27 @@
 # API endpoints
 
-## Companies
+## REST
+### Register company
+```
+POST localhost:4000/api/register/company
+```
+Params:
+- name (String, required)
+- user (String, email format, required)
+- telephone (optional)
 
-- Add company:
+### Register user
 ```
-POST localhost:4000/api/graphql?query=mutation{addCompany(name:"Google", users:["toto@google.com"]){name}}
+POST localhost:4000/api/register/user
 ```
+Params:
+- email (String, required)
+- password (String, required)
+
+### login
+
+## GraphQL
+
 - Get company:
 ```
 GET localhost:4000/api/graphql?query={company(name:"Google"){name,users}}
