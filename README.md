@@ -19,6 +19,13 @@ Params:
 - password (String, required)
 
 ### login
+```
+POST localhost:4000/api/login
+```
+Params:
+- email (String, required)
+- password (String, required)
+Returns token
 
 ## GraphQL
 

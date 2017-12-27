@@ -9,7 +9,7 @@ exports.company = (req, res) => {
   const user = req.body.user
   // verify that user is an email
   if (!user.match(/^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/)) {
-    return res.json({error:'user email address invalid'})
+    return res.json({error:'email address invalid'})
   }
   const company = {
     name: req.body.name,

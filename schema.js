@@ -1,8 +1,5 @@
 const { GraphQLString, GraphQLList,GraphQLObjectType,
   GraphQLNonNull, GraphQLSchema } = require('graphql')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const { secret } = require('./conf')
 const CompanyModel = require('./models/companies')
 const UserModel = require('./models/users')
 
@@ -75,19 +72,7 @@ const mutation = new GraphQLObjectType({
         password: { type: GraphQLString }
       },
       resolve(_, { email, password }) {
-        return UserModel.get({email})
-        .then(user => {
-          if (user) {
-            return bcrypt.compare(password, user.password)
-            .then(res => {
-              if (res) return jwt.sign({id:user._id}, secret, { expiresIn: '6h' })
-              throw 'Wrong password'
-            })
-          } else {
-            throw 'User does not exists'
-          }
-        })
-        .catch(err => { throw err })
+        // route to be removed
       }
     }
   }
