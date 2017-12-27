@@ -42,45 +42,45 @@ const query = new GraphQLObjectType({
   })
 })
 
-const mutation = new GraphQLObjectType({
-  name: 'Mutation',
-  fields: {
-    addCompany: {
-      type: CompanyType,
-      args: {
-        name: { type: GraphQLString },
-        users: { type: new GraphQLList(GraphQLString) }
-      },
-      resolve(_, { name, users }) {
-       // Route to be removed
-      }
-    },
-    addUser: {
-      type: UserType,
-      args: {
-        email: { type: GraphQLString },
-        password: { type: GraphQLString }
-      },
-      resolve(_, { email, password }) {
-        // route to be removed
-      }
-    },
-    logUser: {
-      type: GraphQLString,
-      args: {
-        email: { type: GraphQLString },
-        password: { type: GraphQLString }
-      },
-      resolve(_, { email, password }) {
-        // route to be removed
-      }
-    }
-  }
-})
+// const mutation = new GraphQLObjectType({
+//   name: 'Mutation',
+//   fields: {
+//     addCompany: {
+//       type: CompanyType,
+//       args: {
+//         name: { type: GraphQLString },
+//         users: { type: new GraphQLList(GraphQLString) }
+//       },
+//       resolve(_, { name, users }) {
+//        // Route to be removed
+//       }
+//     },
+//     addUser: {
+//       type: UserType,
+//       args: {
+//         email: { type: GraphQLString },
+//         password: { type: GraphQLString }
+//       },
+//       resolve(_, { email, password }) {
+//         // route to be removed
+//       }
+//     },
+//     logUser: {
+//       type: GraphQLString,
+//       args: {
+//         email: { type: GraphQLString },
+//         password: { type: GraphQLString }
+//       },
+//       resolve(_, { email, password }) {
+//         // route to be removed
+//       }
+//     }
+//   }
+// })
 // This is the schema declaration
 const Schema = new GraphQLSchema({
-  query,
-  mutation
+  query
+//  mutation
 })
 
 module.exports = Schema

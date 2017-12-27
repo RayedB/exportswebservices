@@ -13,7 +13,7 @@ function login(req, res) {
       return bcrypt.compare(password, user.password)
       .then(result => {
         if (result) {
-          const token = jwt.sign({id:user._id}, secret, { expiresIn: '48h' })
+          const token = jwt.sign({id:user._id}, secret, { expiresIn: '7d' })
           return res.json({token})
         }
         return res.json({error:'Wrong password'})
