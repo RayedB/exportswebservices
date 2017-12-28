@@ -33,7 +33,6 @@ const query = new GraphQLObjectType({
       },
       resolve: (_, { name }, context) => {
         console.log(context.user)
-
         return CompanyModel.get({name})
         .then(res => {
           if (res) return res

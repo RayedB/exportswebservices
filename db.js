@@ -71,23 +71,6 @@ exports.getBy = (collectionName, query, fields) => {
         })
     })
 }
-// exports.getByInArray = (collectionName, field, element) => {
-//
-//     return new Promise((resolve, reject) => {
-//
-//         const collection = DB.collection(collectionName)
-//
-//         collection.find( { []}, (err, cursor) => {
-//              if (err) {
-//                reject(err)
-//             } else {
-//                 cursor.toArray((err, data) => {
-//                     resolve(data)
-//                 })
-//             }
-//         })
-//     })
-// }
 
 exports.getAll = function(collectionName, fields = {}) {
 
