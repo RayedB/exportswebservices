@@ -24,7 +24,10 @@ const query = new GraphQLObjectType({
   fields: () => ({
     companies: {
       type: new GraphQLList(CompanyType),
-      resolve: () => CompanyModel.getAll()
+      resolve: (_, args, context) => {
+        checkAdmin(context.user)
+        return CompanyModel.getAll()
+      }
     },
     company: {
       type: CompanyType,
@@ -32,13 +35,12 @@ const query = new GraphQLObjectType({
         name: { type: GraphQLString }
       },
       resolve: (_, { name }, context) => {
-        console.log(context.user)
         return CompanyModel.get({name})
         .then(res => {
           if (res) return res
           throw 'Company does not exists'
         })
-        }
+      }
     }
   })
 })
@@ -78,6 +80,10 @@ const query = new GraphQLObjectType({
 //     }
 //   }
 // })
+
+function checkAdmin(user) {
+  if (!user.admin) throw 'Unauthorized'
+}
 // This is the schema declaration
 const Schema = new GraphQLSchema({
   query

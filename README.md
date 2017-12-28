@@ -18,7 +18,7 @@ Params:
 - email (String, required)
 - password (String, required)
 
-### login
+### Login
 ```
 POST localhost:4000/api/login
 ```
@@ -26,7 +26,7 @@ Params:
 - email (String, required)
 - password (String, required)
 
-Returns token
+Returns JWT
 
 ## GraphQL (protected)
  These endpoints must be called with an authorization header containing the token.
