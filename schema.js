@@ -35,6 +35,7 @@ const query = new GraphQLObjectType({
         name: { type: GraphQLString }
       },
       resolve: (_, { name }, context) => {
+        checkAccess(context.user,name)
         return CompanyModel.get({name})
         .then(res => {
           if (res) return res
@@ -82,7 +83,11 @@ const query = new GraphQLObjectType({
 // })
 
 function checkAdmin(user) {
-  if (!user.admin) throw 'Unauthorized'
+  if (!user || !user.admin) throw 'Unauthorized'
+}
+function checkAccess(user, company) {
+  if (!user) throw 'Unauthorized'
+  if (user.company !== company && !user.admin) throw 'Unauthorized'
 }
 // This is the schema declaration
 const Schema = new GraphQLSchema({
