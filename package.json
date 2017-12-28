@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/RayedB/exportswebservices#readme",
   "dependencies": {
+    "axios": "^0.17.1",
     "bcrypt": "^1.0.3",
     "express": "^4.16.2",
     "express-graphql": "^0.6.11",

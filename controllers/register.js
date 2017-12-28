@@ -1,6 +1,8 @@
+const bcrypt = require('bcrypt')
+const axios = require('axios')
 const CompanyModel = require('../models/companies')
 const UserModel = require('../models/users')
-const bcrypt = require('bcrypt')
+const mailChimp = require('../conf').mailChimp
 
 exports.company = (req, res) => {
   if (!req.body.name) return res.json({error:'company name is required'})
@@ -39,8 +41,17 @@ exports.user = (req, res) => {
       return bcrypt.hash(password, 10)
       .then(hash => UserModel.add({ email, password:hash, admin:false })
       .then(result => {
-        // TODO send email !
+
+        const mailChimpUrl = 'https://' + mailChimp.instance + '.api.mailchimp.com/3.0/lists/' + mailChimp.listId + '/members/'
+        const headers = {'Authorization' : 'Basic '+mailChimp.apiKey}
+
+        axios.post(mailChimpUrl,
+          {'email_address': email,'status': 'subscribed'},
+          { headers })
+        .catch(err => console.log('mailchimp error ',err))
+
         delete result.password
+
         res.json({result})
       }))
       .catch(err => {
