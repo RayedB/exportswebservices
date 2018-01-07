@@ -28,6 +28,25 @@ Params:
 
 Returns JWT
 
+### Reset password
+```
+POST localhost:4000/api/forgot/send
+```
+Params:
+- email (String, required)
+
+Sends an email with the reset token needed to update the password
+
+```
+POST localhost:4000/api/forgot/update
+```
+Params:
+- email (String, required)
+- token (String, required)
+- password (String, new password, required)
+
+Checks token and update password
+
 ## GraphQL (protected)
  These endpoints must be called with an authorization header containing the token.
 
