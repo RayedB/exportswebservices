@@ -21,7 +21,7 @@ exports.sendToken = async (req, res) => {
         to: email,
         from: 'hello@monarqapp.com',
         subject: 'Monarq - Reset your password',
-        html: '<strong>Forgot your password?</strong> <br> Click on this link: '+url+'?token='+token
+        html: '<strong>Forgot your password?</strong> <br> Click on this link: '+url+'?token='+token+'&email='+email
       }
       sgMail.setApiKey(sendGridAPIKey)
       return sgMail.send(mail)
@@ -36,6 +36,28 @@ exports.sendToken = async (req, res) => {
   }
 }
 
-exports.update = (req, res) => {
-  // TODO
+exports.update = async (req, res) => {
+  try {
+    const email = req.body.email
+    const token = req.body.token
+    const newPassword = req.body.password
+    const user = await UserModel.get(email)
+
+    if (user) {
+      const same = await bcrypt.compare(token, user.resetToken)
+      if (same) {
+        const password = await bcrypt.hash(newPassword, 10)
+        await UserModel.update(email, {password})
+        return res.json({result: 'password updated'})
+        
+      } else {
+        return res.json({error:'Invalid reset token'})
+      }
+    } else {
+      return res.json({error:'User does not exist'})
+    }
+  } catch (err) {
+    console.log(err)
+    return res.json({error:'Internal Error'})
+  }
 }
