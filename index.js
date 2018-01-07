@@ -7,6 +7,7 @@ const schema = require('./schema')
 const register = require('./controllers/register')
 const login = require('./controllers/login')
 const auth = require('./controllers/auth')
+const forgotPassword = require('./controllers/forgot')
 const port = 4000
 
   const app = express()
@@ -17,10 +18,14 @@ const port = 4000
 
   connectDb()
   .then(() => {
-    // REST Routes for register & login
+    // REST Routes
+    // register & login
     app.post('/api/register/company',register.company)
     app.post('/api/register/user',register.user)
     app.post('/api/login',login)
+    // reset password
+    app.post('/api/forgot/send', forgotPassword.sendToken)
+    app.post('/api/forgot/update', forgotPassword.update)
 
     // Auth middleware
     app.use(auth)
