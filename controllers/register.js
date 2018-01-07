@@ -51,7 +51,6 @@ exports.user = (req, res) => {
         .catch(err => console.log('mailchimp error ',err))
 
         delete result.password
-
         res.json({result})
       }))
       .catch(err => {

@@ -1,6 +1,7 @@
 const express = require('express')
 const graphqlHTTP = require('express-graphql')
-const BodyParser = require('body-parser');
+const BodyParser = require('body-parser')
+const Cors = require('cors')
 const { connectDb } = require('./db')
 const schema = require('./schema')
 const register = require('./controllers/register')
@@ -12,6 +13,7 @@ const port = 4000
 
   app.use(BodyParser.json({ limit: '250mb' }))
   app.use(BodyParser.urlencoded({ limit: '250mb', extended: true }))
+  app.use(Cors())
 
   connectDb()
   .then(() => {
