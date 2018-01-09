@@ -8,11 +8,12 @@ exports.company = (req, res) => {
   if (!req.body.name) return res.json({error:'company name is required'})
   if (!req.body.user) return res.json({error:'User is required'})
 
-  const user = req.body.user
+  let user = req.body.user
   // verify that user is an email
   if (!user.match(/^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/)) {
     return res.json({error:'email address invalid'})
   }
+  user.role = 'admin'
   const company = {
     name: req.body.name,
     users: [user],
