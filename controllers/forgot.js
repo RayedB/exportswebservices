@@ -49,6 +49,7 @@ exports.update = async (req, res) => {
         const password = await bcrypt.hash(newPassword, 10)
         await UserModel.update(email, {password})
         return res.json({result: 'password updated'})
+
       } else {
         return res.json({error:'Invalid reset token'})
       }

@@ -97,9 +97,10 @@ exports.update = (collectionName, id, values) => {
 
         // update
         const collection = Db.collection(collectionName)
-        //let field = TODO depends on collectionName
 
-        collection.updateOne({ 'name': id }, { $set: values }, (err, data) => {
+        const field = collectionName == 'users' ? 'email' : 'name'
+
+        collection.updateOne({ [field]: id }, { $set: values }, (err, data) => {
             if (err) {
                 reject(err)
             } else {

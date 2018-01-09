@@ -8,7 +8,7 @@ function login(req, res) {
   const email = req.body.email
   const password = req.body.password
 
-  UserModel.get({email})
+  UserModel.get(email)
   .then(user => {
     if (user) {
       return bcrypt.compare(password, user.password)
