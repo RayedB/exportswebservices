@@ -1,7 +1,8 @@
 const sgMail = require('@sendgrid/mail')
 const shortid = require('shortid')
 const bcrypt = require('bcrypt')
-const { sendGridAPIKey } = require('../conf')
+const jwt = require('jsonwebtoken')
+const { sendGridAPIKey, secret } = require('../conf')
 const UserModel = require('../models/users')
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -16,12 +17,15 @@ exports.sendToken = async (req, res) => {
 
       await UserModel.update(email, { resetToken })
 
+      const jwtToken = jwt.sign({ email, token }, secret, { expiresIn: '24h' })
+
+
       const url = isProd ? 'https://monarqapp.com/forgot' : 'http://localhost:8080/forgot'
       const mail = {
         to: email,
         from: 'hello@monarqapp.com',
         subject: 'Monarq - Reset your password',
-        html: '<strong>Forgot your password?</strong> <br> Click on this link: '+url+'?token='+token+'&email='+email
+        html: '<strong>Forgot your password?</strong> <br> Click on this link (expires in 24h): '+url+'?token='+jwtToken
       }
       sgMail.setApiKey(sendGridAPIKey)
       return sgMail.send(mail)
