@@ -18,7 +18,8 @@ function login(req, res) {
           const userInfo = {
             id:user._id,
             admin: user.admin,
-            company: company.name
+            company: company.name,
+            role: user.role
           }
           const token = jwt.sign(userInfo, secret, { expiresIn: '7d' })
           return res.json({token})

@@ -110,6 +110,25 @@ exports.update = (collectionName, id, values) => {
 
     })
 }
+exports.pushArray = (collectionName, id, array, value) => {
+
+    return new Promise((resolve, reject) => {
+
+        // update
+        const collection = Db.collection(collectionName)
+
+        const field = collectionName == 'users' ? 'email' : 'name'
+
+        collection.updateOne({ [field]: id }, { $push: {[array]: value} }, (err, data) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve()
+            }
+        })
+
+    })
+}
 exports.getAllField = (collectionName, field) => {
 
     return new Promise((resolve, reject) => {

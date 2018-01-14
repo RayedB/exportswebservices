@@ -1,5 +1,7 @@
 const { GraphQLString, GraphQLList,GraphQLObjectType,
   GraphQLNonNull, GraphQLSchema } = require('graphql')
+const sgMail = require('@sendgrid/mail')
+const { sendGridAPIKey } = require('./conf')
 const CompanyModel = require('./models/companies')
 const UserModel = require('./models/users')
 
@@ -46,6 +48,32 @@ const query = new GraphQLObjectType({
   })
 })
 
+const mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    inviteUser: {
+      type: GraphQLString,
+      args: {
+        email: { type: GraphQLString }
+      },
+      resolve: async (_, { email }, context) => {
+        checkAccessRoleAdmin(context.user)
+        if (!checkEmail(email)) throw 'invalid email'
+        await CompanyModel.addUser(email)
+        // TODO MAYBE BETTER WITH MAILCHIMP
+        const mail = {
+          to: email,
+          from: 'hello@monarqapp.com',
+          subject: 'You\'ve been invited to work on Monarq',
+          html: '<strong>'+context.user.email+' invited you to work on Monarq.</strong> <br> Register now!'
+        }
+        sgMail.setApiKey(sendGridAPIKey)
+        await sgMail.send(mail)
+        return 'invite successful'
+      }
+    }
+  }
+})
 // const mutation = new GraphQLObjectType({
 //   name: 'Mutation',
 //   fields: {
@@ -85,9 +113,15 @@ const query = new GraphQLObjectType({
 function checkAdmin(user) {
   if (!user || !user.admin) throw 'Unauthorized'
 }
+
 function checkAccess(user, company) {
   if (!user) throw 'Unauthorized'
   if (user.company !== company && !user.admin) throw 'Unauthorized'
+}
+
+function checkAccessRoleAdmin(user) {
+  if (!user) throw 'Unauthorized'
+  if (user.role !== 'admin') throw 'Unauthorized'
 }
 // This is the schema declaration
 const Schema = new GraphQLSchema({

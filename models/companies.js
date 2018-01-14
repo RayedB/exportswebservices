@@ -12,3 +12,5 @@ exports.getByUser = (email) => {
   return Db.getBy('companies', { 'users': email})
   .then(res => res[0])
 }
+
+exports.addUser = (email) => Db.pushArray('companies', users, email)
