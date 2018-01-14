@@ -52,47 +52,27 @@ exports.user = async (req, res) => {
     const company = await CompanyModel.getByUser(email)
 
     if (company) {
+      let admin = false
+      if (company.users.length === 1) admin = true
+      const hash = await bcrypt.hash(password,10)
+      const user = {
+        email,
+        password:hash,
+        admin,
+        company: company.name
+      }
+      await UserModel.add(user)
+      // TODO send email via SendGrid
+      res.json({result: 'User added'})
 
     } else {
       return res.json({error: 'User does not belong to any company'})
     }
-      } catch(err) {
+  } catch(err) {
+    if (err.code == 11000) {
+      return res.json({error:'User already exists'})
+    }
     console.log(err)
     res.json({error: 'Internal Error'})
   }
-
-
-  // CompanyModel.getUsers()
-  // .then(users => {
-  //   if (users.some(u => u === email)) {
-  //     let role = 'basic'
-  //     return bcrypt.hash(password, 10)
-  //     .then(hash => UserModel.add({ email, password:hash, admin:false, role })
-  //     .then(result => {
-  //
-  //       const mailChimpUrl = 'https://' + mailChimp.instance + '.api.mailchimp.com/3.0/lists/' + mailChimp.listId + '/members/'
-  //       const headers = {'Authorization' : 'Basic '+mailChimp.apiKey}
-  //
-  //       axios.post(mailChimpUrl,
-  //         {'email_address': email,'status': 'subscribed'},
-  //         { headers })
-  //       .catch(err => console.log('mailchimp error ',err))
-  //
-  //       delete result.password
-  //       res.json({result})
-  //     }))
-  //     .catch(err => {
-  //       if (err.code == 11000) {
-  //         return res.json({error:'User already exists'})
-  //       }
-  //       throw err
-  //     })
-  //   } else {
-  //     return res.json({error:'User does not belong to any company'})
-  //   }
-  // })
-  // .catch(err => {
-  //     console.log(err)
-  //     return res.json({error:'Internal Error'})
-  // })
 }
