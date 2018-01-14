@@ -111,17 +111,17 @@ const mutation = new GraphQLObjectType({
 // })
 
 function checkAdmin(user) {
-  if (!user || !user.admin) throw 'Unauthorized'
+  if (!user || !user.superAdmin) throw 'Unauthorized'
 }
 
 function checkAccess(user, company) {
   if (!user) throw 'Unauthorized'
-  if (user.company !== company && !user.admin) throw 'Unauthorized'
+  if (user.company !== company && !user.superAdmin) throw 'Unauthorized'
 }
 
 function checkAccessRoleAdmin(user) {
   if (!user) throw 'Unauthorized'
-  if (user.role !== 'admin') throw 'Unauthorized'
+  if (!user.admin) throw 'Unauthorized'
 }
 // This is the schema declaration
 const Schema = new GraphQLSchema({
