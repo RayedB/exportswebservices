@@ -118,6 +118,7 @@ exports.pushArray = (collectionName, id, array, value) => {
         const collection = Db.collection(collectionName)
 
         const field = collectionName == 'users' ? 'email' : 'name'
+        console.log([field], id, [array], value)
 
         collection.updateOne({ [field]: id }, { $push: {[array]: value} }, (err, data) => {
             if (err) {

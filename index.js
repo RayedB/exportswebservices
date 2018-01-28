@@ -2,13 +2,16 @@ const express = require('express')
 const graphqlHTTP = require('express-graphql')
 const BodyParser = require('body-parser')
 const Cors = require('cors')
+const multer  = require('multer')
 const { connectDb } = require('./db')
 const schema = require('./schema')
 const register = require('./controllers/register')
 const login = require('./controllers/login')
 const auth = require('./controllers/auth')
 const forgotPassword = require('./controllers/forgot')
+const newShipment = require('./controllers/newshipment')
 const port = 4000
+const upload = multer({ dest: 'uploads/' })
 
   const app = express()
 
@@ -29,6 +32,7 @@ const port = 4000
 
     // Auth middleware
     app.use(auth)
+    app.post('/api/company/newshipment',upload.single('file'), newShipment)
 
     // GraphQL API
     app.use('/api', graphqlHTTP({

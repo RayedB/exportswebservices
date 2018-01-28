@@ -13,4 +13,5 @@ exports.getByUser = (email) => {
   .then(res => res[0])
 }
 
-exports.addUser = (email) => Db.pushArray('companies', users, email)
+exports.addUser = (email, company) => Db.pushArray('companies',company, "users", email)
+exports.addShipment = (shipment, company) => Db.pushArray('companies', company,"shipments", shipment)

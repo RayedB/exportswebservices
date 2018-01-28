@@ -24,7 +24,8 @@ exports.company = async (req, res) => {
         name: req.body.name,
         users: [user],
         isReviewed: false,
-        telephone: req.body.telephone || null
+        telephone: req.body.telephone || null,
+        shipments: []
       }
 
       await CompanyModel.add(companyToAdd)
