@@ -129,6 +129,25 @@ exports.pushArray = (collectionName, id, array, value) => {
 
     })
 }
+
+exports.updateArray = (collectionName, query, toUpdate) => {
+
+    return new Promise((resolve, reject) => {
+
+        // update
+        const collection = Db.collection(collectionName)
+
+        collection.updateOne(query, { $set: toUpdate }, (err, data) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve()
+            }
+        })
+
+    })
+}
+
 exports.getAllField = (collectionName, field) => {
 
     return new Promise((resolve, reject) => {

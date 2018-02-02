@@ -13,5 +13,15 @@ exports.getByUser = (email) => {
   .then(res => res[0])
 }
 
-exports.addUser = (email, company) => Db.pushArray('companies',company, "users", email)
-exports.addShipment = (shipment, company) => Db.pushArray('companies', company,"shipments", shipment)
+exports.addUser = (email, company) => {
+  return Db.pushArray('companies',company, 'users', email)
+}
+exports.addShipment = (shipment, company) => {
+  return Db.pushArray('companies', company, 'shipments', shipment)
+}
+
+exports.updateShipmentSent = (file, id) => {
+  const query = { 'shipments.bill.file': file }
+  const toUpdate = { 'shipments.$.status': 'sent', 'shipments.$.docParserId': id}
+  return Db.updateArray('companies', query, toUpdate)
+}

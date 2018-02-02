@@ -9,7 +9,6 @@ async function newShipment(req, res) {
       bill: {
         name: req.file.originalname,
         mimetype: req.file.mimetype,
-        encoding: req.file.encoding,
         file: req.file.filename
       },
       status: 'to_send'
@@ -19,17 +18,7 @@ async function newShipment(req, res) {
 
     res.json({result: 'Shipment added'})
 
-    const { parserId } = await CompanyModel.get(companyName)
-
-    const filepath = './uploads/'+req.file.filename
-
-    client.uploadFileByPath(parserId, filepath)
-    .then(result => {
-      console.log(result)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+    sendToDocParser(companyName, req.file.filename)
 
   } catch(err) {
     console.log(err)
@@ -37,4 +26,19 @@ async function newShipment(req, res) {
   }
 }
 
+async function sendToDocParser(company, file) {
+  try {
+    const { parserId } = await CompanyModel.get(company)
+
+    const filepath = './uploads/'+file
+
+    const { id } = await client.uploadFileByPath(parserId, filepath)
+
+    CompanyModel.updateShipmentSent(file,id)
+    .catch(err => console.log(err))
+
+  } catch (err) {
+    console.log(err)
+  }
+}
 module.exports = newShipment
