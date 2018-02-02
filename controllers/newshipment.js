@@ -1,7 +1,7 @@
 const docparser = require('docparser-node')
+const { docParserAPIKey } = require('../conf')
 const client = new docparser.Client(docParserAPIKey)
 const CompanyModel = require('../models/companies')
-const { docParserAPIKey } = require('../conf')
 
 async function newShipment(req, res) {
   try {
