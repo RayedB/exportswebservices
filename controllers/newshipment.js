@@ -1,7 +1,7 @@
 const docparser = require('docparser-node')
+const client = new docparser.Client(docParserAPIKey)
 const CompanyModel = require('../models/companies')
 const { docParserAPIKey } = require('../conf')
-const client = new docparser.Client(docParserAPIKey)
 
 async function newShipment(req, res) {
   try {
@@ -12,21 +12,29 @@ async function newShipment(req, res) {
         encoding: req.file.encoding,
         file: req.file.filename
       },
-      status: 'hihihi'
+      status: 'to_send'
     }
-    await CompanyModel.addShipment(shipment, req.user.company)
+    const companyName = req.user.company
+    await CompanyModel.addShipment(shipment, companyName)
+
     res.json({result: 'Shipment added'})
 
-    client.ping()
-      .then(() => {
-        console.log('authentication succeeded!')
-      })
-      .catch(function(err) {
-        console.log('authentication failed!')
-      })
+    const { parserId } = await CompanyModel.get(companyName)
+
+    const filepath = './uploads/'+req.file.filename
+
+    client.uploadFileByPath(parserId, filepath)
+    .then(result => {
+      console.log(result)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
   } catch(err) {
     console.log(err)
     res.status(500).send({error: 'Internal Error'})
   }
 }
+
 module.exports = newShipment

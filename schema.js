@@ -38,7 +38,7 @@ const query = new GraphQLObjectType({
       },
       resolve: (_, { name }, context) => {
         checkAccess(context.user,name)
-        return CompanyModel.get({name})
+        return CompanyModel.get(name)
         .then(res => {
           if (res) return res
           throw 'Company does not exists'
