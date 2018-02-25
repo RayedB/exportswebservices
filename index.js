@@ -31,7 +31,7 @@ const port = 4000
     // Auth middleware
     app.use(auth)
 
-    app.post('/api/payment/method', payment.saveMethod)
+    app.post('/api/payment/customer', payment.createCustomer)
 
 
     // GraphQL API
