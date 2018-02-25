@@ -52,3 +52,9 @@ exports.subscribeCustomer = async (req, res) => {
     return res.json({ err })
   }
 }
+
+exports.webhook = (req, res) => {
+  console.log(req.body)
+
+  res.json('ok')
+}
