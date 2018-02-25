@@ -4,6 +4,7 @@ const client = new docparser.Client(docParserAPIKey)
 const CompanyModel = require('../models/companies')
 
 async function newShipment(req, res) {
+  console.log('bjrrr')
   try {
     const shipment = {
       bill: {
@@ -35,7 +36,7 @@ async function sendToDocParser(company, file) {
     const { id } = await client.uploadFileByPath(parserId, filepath)
 
     CompanyModel.updateShipmentSent(file,id)
-    .catch(err => console.log(err))
+  //  .catch(err => console.log(err))
 
   } catch (err) {
     console.log(err)

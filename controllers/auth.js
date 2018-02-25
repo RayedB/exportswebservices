@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const { secret } = require('../conf')
 
 function auth(req, res, next) {
+  console.log('bjr1')
   if (!req.headers.authorization) {
     return res.status(401).send({error:'Unauthorized'})
   }
