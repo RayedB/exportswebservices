@@ -32,6 +32,7 @@ const port = 4000
     app.use(auth)
 
     app.post('/api/payment/customer', payment.createCustomer)
+    app.post('/api/payment/subscribe', payment.subscribeCustomer)
 
 
     // GraphQL API
