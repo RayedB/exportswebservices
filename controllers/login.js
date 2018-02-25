@@ -18,6 +18,7 @@ function login(req, res) {
           const userInfo = {
             id:user._id,
             admin: user.admin,
+            email: user.email,
             superAdmin: user.superAdmin || false,
             company: company.name,
           }

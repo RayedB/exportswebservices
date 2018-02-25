@@ -8,6 +8,7 @@ const register = require('./controllers/register')
 const login = require('./controllers/login')
 const auth = require('./controllers/auth')
 const forgotPassword = require('./controllers/forgot')
+const payment = require('./controllers/payment')
 const port = 4000
 
   const app = express()
@@ -29,6 +30,9 @@ const port = 4000
 
     // Auth middleware
     app.use(auth)
+
+    app.post('/api/payment/method', payment.saveMethod)
+
 
     // GraphQL API
     app.use('/api', graphqlHTTP({
